@@ -1,15 +1,15 @@
-clear
-close all force
+function [ Xfinal ] = pso( params )
 %% Variable declarations
 
-numvar=5;                                  %number of variables
-numswarm=50;                               %number of particles in the swarm
-iter=1000;                                 %number of iterations of the algo
-minvar=-10*ones(1,numvar);                 %minimum value the var can take
-maxvar=10*ones(1,numvar);                  %maximum value the var can take
-w=1;                                       %inertia coefficient
-c1=2;                                      %personal accelaration coefficient
-c2=2;                                      %social accelaration coefficient
+numvar=params.numvar;                      %number of variables
+numswarm=params.numswarm;                  %number of particles in the swarm
+iter=params.iter;                          %number of iterations of the algo
+minvar=params.minvar;                      %minimum value the var can take
+maxvar=params.maxvar;                      %maximum value the var can take
+w=params.w;                                %inertia coefficient
+c1=params.c1;                              %personal accelaration coefficient
+c2=params.c2;                              %social accelaration coefficient
+
 singleParticle.x=[];                       %position of the particle
 singleParticle.cost=[];                    %cost of the particle
 singleParticle.velocity=[];                %velocity of the particle
@@ -55,3 +55,4 @@ end
 end
 
 Xfinal=globalBestPos;       %optimum position where value of the function is minimum
+end
