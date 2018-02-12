@@ -9,6 +9,9 @@ maxvar=params.maxvar;                      %maximum value the var can take
 w=params.w;                                %inertia coefficient
 c1=params.c1;                              %personal accelaration coefficient
 c2=params.c2;                              %social accelaration coefficient
+wdamp=params.wdamp;                        %damping coefficient of inertia coefficient
+maxvelocity=0.2*(maxvar-minvar);           %max velocity (for clamping operations)
+minvelocity=-maxvelocity;                  %min velocity (for clamping operations)
 
 singleParticle.x=[];                       %position of the particle
 singleParticle.cost=[];                    %cost of the particle
@@ -37,6 +40,9 @@ for i=1:numswarm
     particles(i).velocity= w*particles(i).velocity +...
         c1*(rand(1,numvar)).*(particles(i).bestPos-particles(i).x)...
         + c2*(rand(1,numvar)).*(globalBestPos-particles(i).x);
+    %Apply velocity limits
+    particles(i).velocity=max(particles(i).velocity,minvelocity);
+    particles(i).velocity=min(particles(i).velocity,maxvelocity);
     
     particles(i).x=particles(i).velocity+particles(i).x;
     particles(i).cost= CostFunction(particles(i).x);
@@ -51,7 +57,7 @@ for i=1:numswarm
     end
 end
     disp("Iteration number: "+num2str(j)+" Cost of particle: "+num2str(globalBestCost))
-    w=w*0.98;   %decreasing the inertia coefficient in every iteration
+    w=w*wdamp;   %damping the inertia coefficient in every iteration
 end
 
 Xfinal=globalBestPos;       %optimum position where value of the function is minimum
