@@ -5,6 +5,12 @@ from scipy.spatial import distance
 def dist(a,b):
     return distance.euclidean(a,b)
 
+def BuildTree(dataset,maxDepth,minSize):
+    root = getSplit(dataset)
+    recursiveSplit(root,maxDepth,minSize,1)
+    return root
+
+
 def splitIndexWise(index,value,dataset):
     left,right=list(),list()
     for row in dataset:
@@ -28,8 +34,6 @@ def giniIndex(groups,labels):
         gini+=temp
         return gini
             
-    
-
 def getSplit(dataset):
     labels= list(set(row[-1] for row in dataset))
     n= len(dataset[0])-1
@@ -42,12 +46,32 @@ def getSplit(dataset):
                 BestGini,BestIndex,BestGroups=gini,i,groups
     return {'index':BestIndex,'groups':BestGroups,'gini':BestGini}
 
-
+def recursiveSplit(node,maxDepth,minSize,depth):
+    left,right=node['groups']
+    del(node['groups'])
+    if not left or not right:
+        node['left']=node['right']= left+right
+    if(depth>=maxDepth):
+        node['left'],node['right']=left,right
+        return
+    if(minSize>=len(node['left'])):
+        node['left']=left
+    else:
+        node['left']=getSplit(left)
+        recursiveSplit(node['left'],maxDepth,minSize,depth+1)
+    if(minSize>=len(node['right'])):
+        node['right']=right
+    else:
+        node['right']=getSplit(right)
+        recursiveSplit(node['right'],maxDepth,minSize,depth+1)
+    
+    
 from sklearn.datasets import load_iris
 iris= load_iris()
 X=iris.data
 y=iris.target
-
+maxDepth=25
+minSize=3
 
 dataset = [[2.771244718,1.784783929,0],
 	[1.728571309,1.169761413,0],
@@ -59,8 +83,10 @@ dataset = [[2.771244718,1.784783929,0],
 	[7.444542326,0.476683375,1],
 	[10.12493903,3.234550982,1],
 	[6.642287351,3.319983761,1]]
-split = getSplit(dataset)
+
 '''import numpy as np
 y=y[:,None]                         #To convert array of size (150,) to size (150,1)
 np.concatenate((X,y),axis=1)
 split= getSplit(X)'''
+
+root=BuildTree(dataset,maxDepth,minSize)

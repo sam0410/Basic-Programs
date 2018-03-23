@@ -1,2 +1,2 @@
 
-This is a basic decision tree implementation from scratch.
+This is a basic decision tree implementation from scratch in python.
