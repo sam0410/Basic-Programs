@@ -3,7 +3,7 @@ import numpy as np
 
 
 sigma=1
-lenInput=2000
+lenInput=5000
 u= np.array([int(random.choice([False, True])) for i in range(lenInput)])
 u= u*2 -1
 M= 9 #amount of delay (number of features)
@@ -95,11 +95,3 @@ print("Logistic Regression Score: ",sum(test_check==pp)/test_check_size)
 
 pp=clfDTbagging.predict(XTest_features)
 print("Bagged Decision Tree Score: ",sum(test_check==pp)/test_check_size)
-
-'''
-clf=RandomForestRegressor(max_depth=5)
-clf.fit(XTrain_features, y_train[M-1:])
-pp=clf.predict(XTrain_features)
-cc= y_train[M-1:]
-print("Random Forest Score: ",sum(cc==pp)/test_check_size)
-'''
