@@ -1,2 +1,2 @@
 
-This is a basic decision tree implementation in python.
+This consists of basic machine learning models in python.
